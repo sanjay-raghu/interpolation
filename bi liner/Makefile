@@ -1,33 +1,28 @@
-output: main.o parent_grid.o  grid_gen.o get_value.o  Bilinerinterpolate.o memory_allocation_2d.o
-	g++ -w main.o parent_grid.o  grid_gen.o get_value.o Bilinerinterpolate.o  memory_allocation_2d.o -o output.out
+output: main.o
+	g++ -w main.o parent_grid.o child_grid.o grid_gen.o memory_allocation_2d.o write_file.o get_value.o bilinear_interpolate.o -o output.output
 
-main.o: main.cpp parent_grid.cpp grid_gen.cpp get_value.cpp Bilinerinterpolate.cpp  grid_gen.h parent_grid.h get_value.h amrsolver.h
+main.o: main.cpp memory_allocation_2d.o parent_grid.o child_grid.o get_value.o write_file.o bilinear_interpolate.o
 	g++ -c main.cpp
 
-parent_grid.o: parent_grid.cpp parent_grid.h grid_gen.h
+parent_grid.o: parent_grid.cpp parent_grid.h grid_gen.o write_file.o
 	g++ -c parent_grid.cpp
 
-child_grid.o: child_grid.cpp grid_gen.cpp get_A_matrix.cpp child_grid.h grid_gen.h get_A_matrix.h
+child_grid.o: child_grid.cpp child_grid.h grid_gen.o write_file.o
 	g++ -c child_grid.cpp
-get_value.o: get_value.cpp
-	g++ -c get_value.cpp
 
-grid_gen.o: grid_gen.cpp
+grid_gen.o: grid_gen.cpp grid_gen.h
 	g++ -c grid_gen.cpp
-
-get_A_matrix.o: get_A_matrix.cpp interpolation.cpp get_A_matrix.h interpolation.h
-	g++ -c get_A_matrix.cpp
-
-interpolation.o: interpolation.cpp interpolation.h
-	g++ -c interpolation.cpp
 
 memory_allocation_2d.o: memory_allocation_2d.cpp memory_allocation_2d.h
 	g++ -c memory_allocation_2d.cpp
-Bilinerinterpolate.o: Bilinerinterpolate.cpp 
-	g++ -c Bilinerinterpolate.cpp
 
+write_file.o: write_file.cpp write_file.h
+	g++ -c write_file.cpp
 
+get_value.o: get_value.cpp get_value.h
+	g++ -c get_value.cpp
 
-
+bilinear_interpolate.o: bilinear_interpolate.cpp bilinear_interpolate.h
+	g++ -c bilinear_interpolate.cpp
 clean:
 	rm -f *.o *.out

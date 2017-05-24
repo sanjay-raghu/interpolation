@@ -1,5 +1,5 @@
-namespace cg
+namespace CG
 {
-   void child_grid(double** pvalue ,double** cvalue ,double *cx,double* cy,double*px,double* py,int pnx,int pny, int cnx, int cny, int i ,int j, int k, int l);
+   void child_grid(double xmin,double xmax,double ymin, double ymax,int cnx,int cny,double** cx,double** cy);
 
 }

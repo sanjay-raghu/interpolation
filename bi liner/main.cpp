@@ -1,31 +1,78 @@
 #include<iostream>
 #include<fstream>
-#include"parent_grid.h"
+#include "parent_grid.h"
+#include "child_grid.h"
+#include "get_value.h"
+#include "bilinear_interpolate.h"
 #include"amrsolver.h"
+#include "write_file.h"
 #include"memory_allocation_2d.h"
-#include "grid_gen.h"
+
 using namespace std;
 
 
 int main(){
   double xmin=0,xmax=10,ymin=0,ymax=10 ;
   int pnx=11,pny=11, cnx=21, cny=21 ;
-  double *px,*py,**pvalue ;
+  double **px,**py,**pvalue,**cx,**cy,**cvalue,**icvalue ;
 
 
 
+  //......................parent grid gen.............................
   //std::cout << "please enter the values of (xmin,xmax) and (ymin,ymax) and pnx(number of nodes in x direction) pny (number of nodes in y direction) \n" << std::endl;
   //std::cin >> xmin >> xmax >> ymin >> ymax >> pnx >> pny  ;
   //dynamic memory alocation to grid points
 
-  px = new double[pnx];
-  py = new double[pny];
+  px = new double* [pnx];
+  py = new double* [pnx];
   pvalue = new double* [pnx];
   MA2::memory_allocation_2d(pvalue,pnx,pny);
+  MA2::memory_allocation_2d(px,pnx,pny);
+  MA2::memory_allocation_2d(py,pnx,pny);
 
-  //........................................
+  PG::parent_grid(xmin,xmax,ymin,ymax,pnx,pny,px,py);
 
-  PG::parent_grid(xmin,xmax,ymin,ymax,pnx,pny,px,py,pvalue);
+  //........................child grid gen...........................
+  cx = new double* [cnx];
+  cy = new double* [cnx];
+  cvalue = new double* [cnx];
+  MA2::memory_allocation_2d(cvalue,cnx,cny);
+  MA2::memory_allocation_2d(cx,cnx,cny);
+  MA2::memory_allocation_2d(cy,cnx,cny);
+
+  CG::child_grid(xmin,xmax,ymin,ymax,cnx,cny,cx,cy);
+
+  //.......................initialization of parent grid value.............................
+
+  get_value::get_value(px,py,pvalue,pnx,pny);
+  write_file::write_file("pvalue.txt",pvalue,pnx,pny);
+
+  //..........................ideal values for child grid  ..........................
+
+  icvalue = new double* [cnx];
+  MA2::memory_allocation_2d(icvalue,cnx,cny);
+  get_value::get_value(cx,cy,icvalue,cnx,cny);
+  write_file::write_file("icvalue.txt",icvalue,cnx,cny);
+
+  //.......................interpolation.............................
+
+  for(int i=0;i< cnx-1 ;i++) {
+    for(int j=0;j < cny-1;j++) {
+
+        amrsolver::bilinear_interpolate(px, py, pvalue, cx, cy, cvalue, pnx, pny, cnx, cny, i, j);
+
+    }
+  }
+
+  write_file::write_file("cvalue.txt",cvalue,cnx-1,cny-1);
+
+  //..................................................................................
+
+
+
+
+
+  /*
 
   double *cx,*cy,*wx,*wy;
   double **cvalue,**wvalue;
@@ -186,6 +233,7 @@ int main(){
     file.close();
 
   }
+  */
 
  return 0;
 }

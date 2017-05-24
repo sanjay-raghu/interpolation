@@ -4,7 +4,7 @@
 #include "grid_gen.h"
 #include"write_file.h"
 
-namespace CG
+namespace child_grid
 {
 
 

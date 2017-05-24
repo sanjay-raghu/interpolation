@@ -1,6 +1,6 @@
 #include<iostream>
-#include"memory_allocation_2d.h"
-namespace MA2
+#include"memory_allocation.h"
+namespace memory_allocation
 {
 
   void memory_allocation_2d(double**p,int nx,int ny)

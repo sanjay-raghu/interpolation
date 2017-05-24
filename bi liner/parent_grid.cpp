@@ -5,7 +5,7 @@
 #include"write_file.h"
 
 //#define parent_grid main
-namespace PG
+namespace parent_grid
 {
 
 

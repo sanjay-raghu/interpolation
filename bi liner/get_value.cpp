@@ -12,9 +12,10 @@ void get_value(double **x,double **y,double **value,int nx,int ny)
     for(int j=0;j<ny;j++)
     {
 
-     value[i][j] = sin(PI*x[i][j]*x[i][j])+cos(PI*y[j][i]*y[j][j]);
-    //  value[i][j] = x[i][j]*x[i][j]+y[i][j]*y[i][j];
+    value[i][j] = 20*sin(.001*x[i][j]*x[i][j])+10*cos(.001*y[j][i]*y[j][j]);
+    //value[i][j] = x[i][j]*x[i][j]+y[i][j]*y[i][j];
     //value[i][j]=10;
+    ;
 
     }
   }
